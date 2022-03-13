@@ -17,14 +17,14 @@ public class TrianglesPanel extends JPanel {
     Dimension panelSize = getSize();
     int panelWidth = panelSize.width - 1;
     int panelHeight = panelSize.height - 1;
-    Point panelCentre = new Point(panelWidth / 2F, panelHeight / 2F);
-    Float triangleSide = 0.95F * Math.min(panelWidth, panelHeight);
-    Float triangleHeight = (0.5F * triangleSide) * (float)Math.sqrt(3);
+    var panelCentre = new Point(panelWidth / 2F, panelHeight / 2F);
+    var triangleSide = 0.95F * Math.min(panelWidth, panelHeight);
+    var triangleHeight = (0.5F * triangleSide) * (float)Math.sqrt(3);
 
     var triangle = Triangle.instance(panelCentre, triangleSide, triangleHeight);
 
     Stream
-      .iterate(triangle, t -> shrinkAndTwist(t))
+      .iterate(triangle, this::shrinkAndTwist)
       .limit(50)
       .forEach(t -> draw(g, t, panelHeight));
   }
@@ -35,6 +35,12 @@ public class TrianglesPanel extends JPanel {
       combine(t.b(), t.c()),
       combine(t.c(), t.a())
     );
+  }
+
+  Point combine(Point a, Point b) {
+    var q = 0.05F;
+    var p = 1 - q;
+    return new Point(p * a.x() + q * b.x(), p * a.y() + q * b.y());
   }
 
   void draw(Graphics g, Triangle t, int panelHeight) {
@@ -48,12 +54,6 @@ public class TrianglesPanel extends JPanel {
     var bCoords = deviceCoords(b, panelHeight);
     int ax = aCoords.x, ay = aCoords.y, bx = bCoords.x, by = bCoords.y;
     g.drawLine(ax, ay, bx, by);
-  }
-
-  Point combine(Point a, Point b) {
-    var q = 0.05F;
-    var p = 1 - q;
-    return new Point(p * a.x() + q * b.x(), p * a.y() + q * b.y());
   }
 
   java.awt.Point deviceCoords(Point p, int panelHeight) {
