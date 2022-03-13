@@ -24,7 +24,7 @@ public class TrianglesPanel extends JPanel {
     var triangle = Triangle.instance(panelCentre, triangleSide, triangleHeight);
 
     Stream
-      .iterate(triangle, this::shrinkAndTwist)
+      .iterate(triangle, t -> shrinkAndTwist(t))
       .limit(50)
       .forEach(t -> draw(g, t, panelHeight));
   }
@@ -51,8 +51,8 @@ public class TrianglesPanel extends JPanel {
   }
 
   Point combine(Point a, Point b) {
-    float q = 0.05F;
-    float p = 1 - q;
+    var q = 0.05F;
+    var p = 1 - q;
     return new Point(p * a.x() + q * b.x(), p * a.y() + q * b.y());
   }
 

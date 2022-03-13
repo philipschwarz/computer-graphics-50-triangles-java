@@ -1,25 +1,22 @@
-import com.company.CvTriangles;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-// This program draws 50 triangles inside each other.
-public class FiftyConcentricTriangles extends Frame {
+public class FiftyConcentricTriangles {
 
   public static void main(String[] args) {
-    new FiftyConcentricTriangles();
+    // Create the frame/panel on the event dispatching thread.
+    SwingUtilities.invokeLater(
+      () -> new FiftyConcentricTriangles().drawTriangles()
+    );
   }
 
-  FiftyConcentricTriangles() {
-    super("Triangles: 50 triangles inside each other");
-    addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {
-        System.exit(0);
-      }
-    });
-    setSize(600, 400);
-    add("Center", new TrianglesPanel());
-    setVisible(true);
+  void drawTriangles() {
+    JFrame.setDefaultLookAndFeelDecorated(true);
+    var frame = new JFrame("Triangles: 50 triangles inside each other");
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    frame.setSize(600, 400);
+    frame.add(new TrianglesPanel());
+    frame.setVisible(true);
   }
 }
